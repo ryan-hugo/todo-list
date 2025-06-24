@@ -117,7 +117,8 @@ body {
   padding: 10px 18px;
   white-space: pre-line;
   word-break: break-word;
-}
+  width: 55%;
+  }
 
 .task-checkbox {
   width: 20px;
