@@ -59,6 +59,36 @@ function createTaskElement(taskId, taskText, isChecked = false) {
   editBtn.innerHTML = `<i class="bi bi-pencil" aria-hidden="true"></i>`;
   editBtn.classList.add("edit-btn");
 
+  editBtn.addEventListener("click", () => {
+    // Cria um input para edição
+    const editInput = document.createElement("input");
+    editInput.type = "text";
+    editInput.value = label.textContent;
+    editInput.classList.add("edit-input");
+    label.style.display = "none";
+    editBtn.style.display = "none";
+    taskContainer.insertBefore(editInput, btnContainer);
+    editInput.focus();
+
+    // Salva edição ao perder foco ou pressionar Enter
+    function saveEdit() {
+      const newValue = editInput.value.trim();
+      if (newValue !== "") {
+        label.textContent = newValue;
+        taskList[taskId].value = newValue;
+        localStorage.setItem("taskList", JSON.stringify(taskList));
+      }
+      label.style.display = "";
+      editBtn.style.display = "";
+      taskContainer.removeChild(editInput);
+    }
+
+    editInput.addEventListener("keydown", (e) => {
+      if (e.key === "Enter") saveEdit();
+    });
+    editInput.addEventListener("blur", saveEdit);
+  });
+
   const deleteBtn = document.createElement("button");
   deleteBtn.setAttribute("aria-label", "Excluir Tarefa");
   deleteBtn.innerHTML = `<i class="bi bi-trash" aria-hidden="true"></i>`;

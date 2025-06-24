@@ -131,6 +131,16 @@ body {
   transition: color 0.3s ease;
 }
 
+.edit-input {
+  padding: 10px;
+  outline: none;
+  border: none;
+  border-radius: 8px;
+  background: linear-gradient(to right, #161616, #340000);
+  color: rgb(255, 255, 255);
+  width: 60%;
+}
+
 .btn-container {
   display: flex;
   gap: 10px;
