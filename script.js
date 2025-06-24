@@ -220,6 +220,9 @@ function renderPagination(totalPages, page) {
     const btn = document.createElement("button");
     btn.textContent = i;
     btn.className = i === page ? "active" : "";
+    if(btn.classList.contains("active")){
+      btn.style.background = "linear-gradient(to right, #740101, #161616)"
+    }
     btn.addEventListener("click", () => {
       currentPage = i;
       renderTasksPage(currentPage);
