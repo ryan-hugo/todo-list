@@ -34,20 +34,24 @@ function createTaskElement(taskId, taskText, isChecked = false) {
   if (isChecked) {
     label.style.textDecoration = "line-through";
   }
+  const icon = checkbox.querySelector("i");
 
   checkbox.addEventListener("click", () => {
-    const icon = checkbox.querySelector("i");
     const isNowChecked = icon.classList.contains("bi-circle");
 
     if (isNowChecked) {
       icon.classList.remove("bi-circle");
       icon.classList.add("bi-check-circle");
       label.style.textDecoration = "line-through";
+      label.style.color = "gray"
+      icon.style.color = "gray"
       taskList[taskId].isChecked = true;
     } else {
       icon.classList.remove("bi-check-circle");
       icon.classList.add("bi-circle");
       label.style.textDecoration = "none";
+      label.style.color = "white"
+      icon.style.color = "inherit"
       taskList[taskId].isChecked = false;
     }
     localStorage.setItem("taskList", JSON.stringify(taskList));
@@ -98,7 +102,7 @@ function createTaskElement(taskId, taskText, isChecked = false) {
     // Cria o overlay de confirmação
     const overlay = document.createElement("div");
     overlay.className = "confirm-overlay";
-    
+
 
     // Cria o modal de confirmação
     const modal = document.createElement("div");
@@ -107,7 +111,7 @@ function createTaskElement(taskId, taskText, isChecked = false) {
     const msg = document.createElement("p");
     msg.id = "modalText";
     msg.textContent = "Tem certeza que deseja excluir esta tarefa?";
-    
+
 
     const btnYes = document.createElement("button");
     btnYes.textContent = "Sim";
@@ -142,6 +146,11 @@ function createTaskElement(taskId, taskText, isChecked = false) {
 
   btnContainer.appendChild(editBtn);
   btnContainer.appendChild(deleteBtn);
+  if (taskList[taskId].isChecked === true) {
+    label.style.color = "gray"
+    icon.style.color = "gray"
+  }
+
 
   taskContainer.appendChild(checkbox);
   taskContainer.appendChild(label);
