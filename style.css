@@ -153,18 +153,18 @@ body {
 }
 
 .delete-btn {
-  /* background-color: red; */
   padding: 5px 10px;
   border: none;
   color: rgb(255, 255, 255);
   cursor: pointer;
   border-radius: 5px;
   background-color: transparent;
+  font-size: 1em;
 }
 
 .delete-btn:hover {
   color: #ffffff;
-  background-color: #a70000;
+  background-color: #c00000be;
   transition: background-color 0.3s ease;
 }
 
@@ -175,10 +175,11 @@ body {
   cursor: pointer;
   border-radius: 5px;
   background-color: transparent;
+  font-size: 1em;
 }
 
 .edit-btn:hover {
-  background-color: white;
+  background-color: rgba(255, 255, 255, 0.932);
   color: #000000;
   transition:  0.3s ease;
 }
@@ -210,7 +211,7 @@ body {
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(0, 0, 0, 0.5);
+  background-color: rgba(0, 0, 0, 0.541);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -218,7 +219,7 @@ body {
 
  .confirm-modal{
   background: linear-gradient(to right, #161616, #500000);
-  padding: 40px;
+  padding: 30px;
   border-radius: 10px;
   color: #ffffff;
   text-align: center;
@@ -227,22 +228,25 @@ body {
 
  #modalText{
   margin-bottom: 20px;
-  font-size: 0.8em;
-  letter-spacing: 0.1em;
+  font-size: 0.85em;
+  letter-spacing: 0.16em;
+  background-color: rgba(0, 0, 0, 0.315);
+  border-radius: 6px;
+  padding: 40px;
  }
 
  .confirm-yes-btn,
  .confirm-no-btn {
-    padding: 10px 20px;
+    padding: 10px 30px;
     border: none;
     border-radius: 5px;
     cursor: pointer;
-    margin: 0 10px;
+    margin: 0 15px;
     color: #000000;
 }
 
 .confirm-yes-btn:hover {
-  background-color: #520000;
+  background-color: #750000;
   color: #ffffff;
   transition: background-color 0.3s ease;
 }
