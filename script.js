@@ -94,13 +94,28 @@ function createTaskElement(taskId, taskText, isChecked = false) {
   deleteBtn.innerHTML = `<i class="bi bi-trash" aria-hidden="true"></i>`;
   deleteBtn.classList.add("delete-btn");
 
-  deleteBtn.addEventListener("click", () => {
-    delete taskList[taskId];
-    localStorage.setItem("taskList", JSON.stringify(taskList));
-    manageTask.removeChild(taskContainer);
-    if (Object.keys(taskList).length === 0) {
-      manageTask.style.display = "none";
-      noTaskMessage.style.display = "flex";
+  //   deleteBtn.addEventListener("click", () => {
+  //     delete taskList[taskId];
+  //     localStorage.setItem("taskList", JSON.stringify(taskList));
+  //     manageTask.removeChild(taskContainer);
+  //     if (Object.keys(taskList).length === 0) {
+  //       manageTask.style.display = "none";
+  //       noTaskMessage.style.display = "flex";
+  //     }
+  //   });
+  manageTask.addEventListener("click", (e) => {
+    if (e.target.closest(".delete-btn")) {
+      const taskContainer = e.target.closest(".task");
+      const checkbox = taskContainer.querySelector(".task-checkbox");
+      if (checkbox && taskList[checkbox.id]) {
+        delete taskList[checkbox.id];
+        localStorage.setItem("taskList", JSON.stringify(taskList));
+        const totalPages = Math.ceil(
+          Object.keys(taskList).length / TASKS_PER_PAGE
+        );
+        if (currentPage > totalPages) currentPage = totalPages || 1;
+        refreshTasks();
+      }
     }
   });
   noTaskMessage.style.display = "none";
@@ -118,32 +133,81 @@ function createTaskElement(taskId, taskText, isChecked = false) {
 
 function addTask() {
   const taskText = inputText.value.trim();
-
   if (taskText === "") {
     alert("Por favor, insira uma tarefa.");
     return;
   }
-
   const taskId = `task-${Date.now()}`;
   taskList[taskId] = { value: taskText, isChecked: false };
   localStorage.setItem("taskList", JSON.stringify(taskList));
-
-  createTaskElement(taskId, taskText, false);
-
   inputText.value = "";
+  currentPage = Math.ceil(Object.keys(taskList).length / TASKS_PER_PAGE);
+  refreshTasks();
 }
 
+// Atualize o carregamento inicial para usar renderTasksPage
 window.addEventListener("DOMContentLoaded", () => {
   const storedTasks = JSON.parse(localStorage.getItem("taskList"));
-
   if (storedTasks) {
     taskList = storedTasks;
-    Object.keys(taskList).forEach((taskId) => {
-      const { value, isChecked } = taskList[taskId];
-      createTaskElement(taskId, value, isChecked);
-    });
   } else {
     manageTask.style.display = "none";
     noTaskMessage.style.display = "flex";
   }
+  renderTasksPage(currentPage);
 });
+
+// Paginação de tarefas
+const TASKS_PER_PAGE = 7;
+let currentPage = 1;
+
+function renderTasksPage(page = 1) {
+  manageTask.innerHTML = "";
+  const taskIds = Object.keys(taskList);
+  const totalPages = Math.ceil(taskIds.length / TASKS_PER_PAGE);
+  if (taskIds.length === 0) {
+    manageTask.style.display = "none";
+    noTaskMessage.style.display = "flex";
+    removePagination();
+    return;
+  }
+  manageTask.style.display = "flex";
+  noTaskMessage.style.display = "none";
+  const start = (page - 1) * TASKS_PER_PAGE;
+  const end = start + TASKS_PER_PAGE;
+  taskIds.slice(start, end).forEach((taskId) => {
+    const { value, isChecked } = taskList[taskId];
+    createTaskElement(taskId, value, isChecked);
+  });
+  renderPagination(totalPages, page);
+}
+
+function renderPagination(totalPages, page) {
+  removePagination();
+  if (totalPages <= 1) return;
+  const pagination = document.createElement("div");
+  pagination.className = "pagination";
+  for (let i = 1; i <= totalPages; i++) {
+    const btn = document.createElement("button");
+    btn.textContent = i;
+    btn.className = i === page ? "active" : "";
+    btn.addEventListener("click", () => {
+      currentPage = i;
+      renderTasksPage(currentPage);
+    });
+    pagination.appendChild(btn);
+  }
+  manageTask.parentNode.appendChild(pagination);
+}
+
+function removePagination() {
+  const oldPagination = document.querySelector(".pagination");
+  if (oldPagination) oldPagination.remove();
+}
+
+// Substitui a chamada de createTaskElement por renderTasksPage
+function refreshTasks() {
+  renderTasksPage(currentPage);
+}
+
+// Atualize exclusão de tarefas para usar refreshTasks
