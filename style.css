@@ -158,7 +158,7 @@ body {
 
 .delete-btn:hover {
   color: #ffffff;
-  background-color: #b40101;
+  background-color: #720000;
   transition: background-color 0.3s ease;
 }
 
@@ -187,14 +187,61 @@ body {
 .pagination button {
   padding: 10px 15px;
   border: none;
-  border-radius: 5px;
+  border-radius: 20px;
   background-color: transparent;
   color: #ffffff;
   cursor: pointer;
   margin: 0 5px;
 }
  .pagination button:hover {
-  background: linear-gradient(to right, #6d0000, #161616);
-  transition: background-color 0.3s ease;
-  border-radius: 20px;
+    background: linear-gradient(to right, #740101, #161616);
+    border-radius: 20px;
  }
+
+ .confirm-overlay{
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+ }
+
+ .confirm-modal{
+  background: linear-gradient(to right, #161616, #500000);
+  padding: 40px;
+  border-radius: 10px;
+  color: #ffffff;
+  text-align: center;
+  width: 400px;
+ }
+
+ #modalText{
+  margin-bottom: 20px;
+  font-size: 0.8em;
+  letter-spacing: 0.1em;
+ }
+
+ .confirm-yes-btn,
+ .confirm-no-btn {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin: 0 10px;
+    color: #000000;
+}
+
+.confirm-yes-btn:hover {
+  background-color: #520000;
+  color: #ffffff;
+  transition: background-color 0.3s ease;
+}
+.confirm-no-btn:hover {
+  background-color: #111111;
+  color: #ffffff;
+  transition: background-color 0.3s ease;
+}

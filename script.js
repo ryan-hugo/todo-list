@@ -94,20 +94,49 @@ function createTaskElement(taskId, taskText, isChecked = false) {
   deleteBtn.innerHTML = `<i class="bi bi-trash" aria-hidden="true"></i>`;
   deleteBtn.classList.add("delete-btn");
 
-  manageTask.addEventListener("click", (e) => {
-    if (e.target.closest(".delete-btn")) {
-      const taskContainer = e.target.closest(".task");
-      const checkbox = taskContainer.querySelector(".task-checkbox");
-      if (checkbox && taskList[checkbox.id]) {
-        delete taskList[checkbox.id];
-        localStorage.setItem("taskList", JSON.stringify(taskList));
-        const totalPages = Math.ceil(
-          Object.keys(taskList).length / TASKS_PER_PAGE
-        );
-        if (currentPage > totalPages) currentPage = totalPages || 1;
-        refreshTasks();
-      }
-    }
+  deleteBtn.addEventListener("click", () => {
+    // Cria o overlay de confirmação
+    const overlay = document.createElement("div");
+    overlay.className = "confirm-overlay";
+    
+
+    // Cria o modal de confirmação
+    const modal = document.createElement("div");
+    modal.classList.add("confirm-modal")
+
+    const msg = document.createElement("p");
+    msg.id = "modalText";
+    msg.textContent = "Tem certeza que deseja excluir esta tarefa?";
+    
+
+    const btnYes = document.createElement("button");
+    btnYes.textContent = "Sim";
+    btnYes.className = "confirm-yes-btn";
+
+    const btnNo = document.createElement("button");
+    btnNo.textContent = "Não";
+    btnNo.className = "confirm-no-btn";
+
+    btnYes.addEventListener("click", () => {
+      delete taskList[taskId];
+      localStorage.setItem("taskList", JSON.stringify(taskList));
+      document.body.removeChild(overlay);
+      const totalPages = Math.ceil(
+        Object.keys(taskList).length / TASKS_PER_PAGE
+      );
+      if (currentPage > totalPages) currentPage = totalPages || 1;
+      refreshTasks();
+    });
+
+    btnNo.addEventListener("click", () => {
+      document.body.removeChild(overlay);
+    });
+
+    modal.appendChild(msg);
+    modal.appendChild(btnYes);
+    modal.appendChild(btnNo);
+    overlay.appendChild(modal);
+    document.body.appendChild(overlay);
   });
   noTaskMessage.style.display = "none";
 
