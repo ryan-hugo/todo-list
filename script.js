@@ -67,6 +67,7 @@ function createTaskElement(taskId, taskText, isChecked = false) {
     // Cria um input para edição
     const editInput = document.createElement("input");
     editInput.type = "text";
+    editInput.maxLength = "45";
     editInput.value = label.textContent;
     editInput.classList.add("edit-input");
     label.style.display = "none";
