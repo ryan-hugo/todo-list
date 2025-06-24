@@ -153,12 +153,12 @@ body {
   color: rgb(255, 255, 255);
   cursor: pointer;
   border-radius: 5px;
-  background-color: #960000;
+  background-color: transparent;
 }
 
 .delete-btn:hover {
   color: #ffffff;
-  background-color: #560101;
+  background-color: #b40101;
   transition: background-color 0.3s ease;
 }
 
@@ -168,12 +168,13 @@ body {
   color: rgb(255, 255, 255);
   cursor: pointer;
   border-radius: 5px;
-  background-color: #000000;
+  background-color: transparent;
 }
 
 .edit-btn:hover {
-  background-color: #1a1a1a;
-  transition: background-color 0.3s ease;
+  background-color: white;
+  color: #000000;
+  transition:  0.3s ease;
 }
 
 .pagination {

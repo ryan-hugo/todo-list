@@ -25,8 +25,8 @@ function createTaskElement(taskId, taskText, isChecked = false) {
   checkbox.classList.add("task-checkbox");
   checkbox.id = taskId;
   checkbox.innerHTML = isChecked
-    ? `<i class="bi bi-check-square"></i>`
-    : `<i class="bi bi-square"></i>`;
+    ? `<i class="bi bi-check-circle"></i>`
+    : `<i class="bi bi-circle"></i>`;
 
   const label = document.createElement("label");
   label.classList.add("taskLabel");
@@ -37,16 +37,16 @@ function createTaskElement(taskId, taskText, isChecked = false) {
 
   checkbox.addEventListener("click", () => {
     const icon = checkbox.querySelector("i");
-    const isNowChecked = icon.classList.contains("bi-square");
+    const isNowChecked = icon.classList.contains("bi-circle");
 
     if (isNowChecked) {
-      icon.classList.remove("bi-square");
-      icon.classList.add("bi-check-square");
+      icon.classList.remove("bi-circle");
+      icon.classList.add("bi-check-circle");
       label.style.textDecoration = "line-through";
       taskList[taskId].isChecked = true;
     } else {
-      icon.classList.remove("bi-check-square");
-      icon.classList.add("bi-square");
+      icon.classList.remove("bi-check-circle");
+      icon.classList.add("bi-circle");
       label.style.textDecoration = "none";
       taskList[taskId].isChecked = false;
     }
@@ -94,15 +94,6 @@ function createTaskElement(taskId, taskText, isChecked = false) {
   deleteBtn.innerHTML = `<i class="bi bi-trash" aria-hidden="true"></i>`;
   deleteBtn.classList.add("delete-btn");
 
-  //   deleteBtn.addEventListener("click", () => {
-  //     delete taskList[taskId];
-  //     localStorage.setItem("taskList", JSON.stringify(taskList));
-  //     manageTask.removeChild(taskContainer);
-  //     if (Object.keys(taskList).length === 0) {
-  //       manageTask.style.display = "none";
-  //       noTaskMessage.style.display = "flex";
-  //     }
-  //   });
   manageTask.addEventListener("click", (e) => {
     if (e.target.closest(".delete-btn")) {
       const taskContainer = e.target.closest(".task");
@@ -210,4 +201,3 @@ function refreshTasks() {
   renderTasksPage(currentPage);
 }
 
-// Atualize exclusão de tarefas para usar refreshTasks
