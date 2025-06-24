@@ -135,7 +135,7 @@ body {
   padding: 10px;
   outline: none;
   border: none;
-  border-radius: 8px;
+  border-radius: 12px;
   background: linear-gradient(to right, #161616, #340000);
   color: rgb(255, 255, 255);
   width: 60%;
@@ -188,7 +188,13 @@ body {
   padding: 10px 15px;
   border: none;
   border-radius: 5px;
-  color: #000000;
+  background-color: transparent;
+  color: #ffffff;
   cursor: pointer;
   margin: 0 5px;
 }
+ .pagination button:hover {
+  background: linear-gradient(to right, #6d0000, #161616);
+  transition: background-color 0.3s ease;
+  border-radius: 20px;
+ }
