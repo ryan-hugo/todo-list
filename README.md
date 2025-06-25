@@ -57,4 +57,4 @@ Este projeto está licenciado sob a licença MIT.
 
 ---
 
-Desenvolvido por [Seu Nome].
+Desenvolvido por Ryan Hugo.
