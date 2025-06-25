@@ -13,6 +13,17 @@ inputText.addEventListener("keydown", function (event) {
 
 addBtn.addEventListener("click", addTask);
 
+// Utilitário para atualizar localStorage e recarregar tarefas
+function updateTaskListAndRefresh() {
+  localStorage.setItem("taskList", JSON.stringify(taskList));
+  refreshTasks();
+}
+
+// Função para validar entrada de tarefa
+function isValidTaskInput(text) {
+  return text.trim() !== "" && !Object.values(taskList).some(task => task.value === text.trim());
+}
+
 function createTaskElement(taskId, taskText, isChecked = false) {
   const taskContainer = document.createElement("div");
   taskContainer.classList.add("task");
@@ -31,31 +42,37 @@ function createTaskElement(taskId, taskText, isChecked = false) {
   const label = document.createElement("label");
   label.classList.add("taskLabel");
   label.textContent = taskText;
+  label.setAttribute("tabindex", "0"); // Acessibilidade
   if (isChecked) {
     label.style.textDecoration = "line-through";
+    label.style.color = "gray";
   }
   const icon = checkbox.querySelector("i");
 
-  checkbox.addEventListener("click", () => {
+  function toggleCheck() {
     const isNowChecked = icon.classList.contains("bi-circle");
-
     if (isNowChecked) {
       icon.classList.remove("bi-circle");
       icon.classList.add("bi-check-circle");
-      label.style.textDecoration = "line-through";
-      label.style.color = "gray"
-      icon.style.color = "gray"
+      label.classList.add("checked");
       taskList[taskId].isChecked = true;
     } else {
       icon.classList.remove("bi-check-circle");
       icon.classList.add("bi-circle");
-      label.style.textDecoration = "none";
-      label.style.color = "white"
-      icon.style.color = "inherit"
+      label.classList.remove("checked");
       taskList[taskId].isChecked = false;
     }
-    localStorage.setItem("taskList", JSON.stringify(taskList));
-    console.log(taskList);
+    updateTaskListAndRefresh();
+  }
+
+  checkbox.addEventListener("click", toggleCheck);
+
+  // Permite marcar/desmarcar com espaço (acessibilidade)
+  label.addEventListener("keydown", (e) => {
+    if (e.key === " " || e.key === "Enter") {
+      e.preventDefault();
+      toggleCheck();
+    }
   });
 
   const editBtn = document.createElement("button");
@@ -63,36 +80,46 @@ function createTaskElement(taskId, taskText, isChecked = false) {
   editBtn.innerHTML = `<i class="bi bi-pencil" aria-hidden="true"></i>`;
   editBtn.classList.add("edit-btn");
 
-  editBtn.addEventListener("click", () => {
-    // Cria um input para edição
+  function handleEdit() {
     const editInput = document.createElement("input");
     editInput.type = "text";
     editInput.maxLength = "65";
     editInput.value = label.textContent;
     editInput.classList.add("edit-input");
+    editInput.setAttribute("aria-label", "Editar texto da tarefa");
     label.style.display = "none";
     editBtn.style.display = "none";
     taskContainer.insertBefore(editInput, btnContainer);
     editInput.focus();
 
-    // Salva edição ao perder foco ou pressionar Enter
     function saveEdit() {
       const newValue = editInput.value.trim();
-      if (newValue !== "") {
+      if (isValidTaskInput(newValue)) {
         label.textContent = newValue;
         taskList[taskId].value = newValue;
-        localStorage.setItem("taskList", JSON.stringify(taskList));
+        updateTaskListAndRefresh();
       }
       label.style.display = "";
       editBtn.style.display = "";
-      taskContainer.removeChild(editInput);
+      if (taskContainer.contains(editInput)) {
+        taskContainer.removeChild(editInput);
+      }
     }
 
     editInput.addEventListener("keydown", (e) => {
       if (e.key === "Enter") saveEdit();
+      if (e.key === "Escape") {
+        label.style.display = "";
+        editBtn.style.display = "";
+        if (taskContainer.contains(editInput)) {
+          taskContainer.removeChild(editInput);
+        }
+      }
     });
     editInput.addEventListener("blur", saveEdit);
-  });
+  }
+
+  editBtn.addEventListener("click", handleEdit);
 
   const deleteBtn = document.createElement("button");
   deleteBtn.setAttribute("aria-label", "Excluir Tarefa");
@@ -100,19 +127,18 @@ function createTaskElement(taskId, taskText, isChecked = false) {
   deleteBtn.classList.add("delete-btn");
 
   deleteBtn.addEventListener("click", () => {
-    // Cria o overlay de confirmação
+    // Overlay de confirmação
     const overlay = document.createElement("div");
     overlay.className = "confirm-overlay";
+    overlay.setAttribute("tabindex", "0");
 
-
-    // Cria o modal de confirmação
+    // Modal de confirmação
     const modal = document.createElement("div");
-    modal.classList.add("confirm-modal")
+    modal.classList.add("confirm-modal");
 
     const msg = document.createElement("p");
     msg.id = "modalText";
     msg.textContent = "Tem certeza que deseja excluir esta tarefa?";
-
 
     const btnYes = document.createElement("button");
     btnYes.textContent = "Sim";
@@ -124,7 +150,7 @@ function createTaskElement(taskId, taskText, isChecked = false) {
 
     btnYes.addEventListener("click", () => {
       delete taskList[taskId];
-      localStorage.setItem("taskList", JSON.stringify(taskList));
+      updateTaskListAndRefresh();
       document.body.removeChild(overlay);
       const totalPages = Math.ceil(
         Object.keys(taskList).length / TASKS_PER_PAGE
@@ -142,16 +168,18 @@ function createTaskElement(taskId, taskText, isChecked = false) {
     modal.appendChild(btnNo);
     overlay.appendChild(modal);
     document.body.appendChild(overlay);
+    btnNo.focus();
   });
   noTaskMessage.style.display = "none";
 
   btnContainer.appendChild(editBtn);
   btnContainer.appendChild(deleteBtn);
-  if (taskList[taskId].isChecked === true) {
-    label.style.color = "gray"
-    icon.style.color = "gray"
-  }
 
+  // Use classes para estilos ao invés de inline
+  if (taskList[taskId].isChecked === true) {
+    label.classList.add("checked");
+    icon.style.color = "gray";
+  }
 
   taskContainer.appendChild(checkbox);
   taskContainer.appendChild(label);
@@ -163,17 +191,23 @@ function createTaskElement(taskId, taskText, isChecked = false) {
 
 function addTask() {
   const taskText = inputText.value.trim();
-  if (taskText === "") {
-    alert("Por favor, insira uma tarefa.");
+  if (!isValidTaskInput(taskText)) {
+    alert("Por favor, insira uma tarefa válida e não duplicada.");
     return;
   }
   const taskId = `task-${Date.now()}`;
   taskList[taskId] = { value: taskText, isChecked: false };
-  localStorage.setItem("taskList", JSON.stringify(taskList));
+  updateTaskListAndRefresh();
   inputText.value = "";
   currentPage = Math.ceil(Object.keys(taskList).length / TASKS_PER_PAGE);
   refreshTasks();
 }
+
+// Desabilita botão "Adicionar" se campo estiver vazio
+inputText.addEventListener("input", () => {
+  addBtn.disabled = inputText.value.trim() === "";
+});
+addBtn.disabled = true;
 
 // Atualize o carregamento inicial para usar renderTasksPage
 window.addEventListener("DOMContentLoaded", () => {
