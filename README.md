@@ -2,8 +2,8 @@
 
 Uma aplicação web simples para gerenciar tarefas do dia a dia, com foco em acessibilidade, usabilidade e organização.
 
-<p align="center" style="border-radius: 10px">
-   <img src="images/tela-final-1.png" alt="Tela final do Todo List" />
+<p align="center">
+   <img src="images/tela-final-1.png" alt="Tela final do Todo List" style="border-radius: 10px;" />
 </p>
 
 ## Funcionalidades
