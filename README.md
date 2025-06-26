@@ -2,6 +2,10 @@
 
 Uma aplicação web simples para gerenciar tarefas do dia a dia, com foco em acessibilidade, usabilidade e organização.
 
+<p align="center">
+   <img src="images/tela-final.png" alt="Tela final do Todo List" />
+</p>
+
 ## Funcionalidades
 
 - Adicionar, editar e excluir tarefas
@@ -22,9 +26,9 @@ Uma aplicação web simples para gerenciar tarefas do dia a dia, com foco em ace
 ## Como Usar
 
 1. **Clone o repositório:**
-   ```sh
-   git clone https://github.com/seu-usuario/todo-list.git
-   ```
+    ```sh
+    git clone https://github.com/seu-usuario/todo-list.git
+    ```
 2. **Abra o arquivo `index.html` em seu navegador.**
 3. **Adicione suas tarefas no campo de texto e clique em "Adicionar".**
 4. **Use os botões de editar (✏️) e excluir (🗑️) para gerenciar suas tarefas.**
@@ -57,4 +61,4 @@ Este projeto está licenciado sob a licença MIT.
 
 ---
 
-Desenvolvido por [Seu Nome].
+Desenvolvido por Ryan Hugo :).
